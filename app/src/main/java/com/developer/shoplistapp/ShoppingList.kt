@@ -1,5 +1,6 @@
 package com.developer.shoplistapp
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -35,12 +37,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun ShoppingList(){
+fun ShoppingList(
+    locationUtil: LocationUtil,
+    viewModel: LocationViewModel,
+    navController: NavController,
+    context: Context,
+    address: String
+){
     var shoppingItems by remember { mutableStateOf(listOf<ShoppingListItem>()) }
     var showDialog by remember { mutableStateOf(false) }
     var itemName by remember { mutableStateOf("") }
@@ -164,8 +174,21 @@ fun ShoppingListItem(
             ),
         horizontalArrangement = Arrangement.SpaceBetween
     ){
-        Text(text = item.name, modifier = Modifier.padding(8.dp))
-        Text(text = "Qty: ${item.quantity}", modifier = Modifier.padding(8.dp))
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp)
+        ) {
+            Row {
+                Text(text = item.name, modifier = Modifier.padding(8.dp))
+                Text(text = "Qty: ${item.quantity}", modifier = Modifier.padding(8.dp))
+            }
+
+            Row(modifier = Modifier.fillMaxSize()){
+                Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
+                Text(text = item.address)
+            }
+        }
 
         Row(
             horizontalArrangement = Arrangement.End
@@ -217,5 +240,6 @@ data class ShoppingListItem(
     var id: Int,
     var name: String,
     var quantity: Int,
-    var isEditing: Boolean = false
+    var isEditing: Boolean = false,
+    var address: String = ""
 )
