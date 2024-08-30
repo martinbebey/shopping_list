@@ -1,1 +1,0 @@
-https://console.cloud.google.com/apis/credentials/key/f912d641-f1b8-4b36-95fa-e85418b0ffc4?project=theshopper-434022
